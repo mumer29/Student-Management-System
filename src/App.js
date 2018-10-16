@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import FrontComp from './components/DashBoard/FrontCom';
+import {BrowserRouter as Router, Route} from "react-router-dom";
+import Students from './components/DashBoard/StudentData/students';
+import AddStudents from './components/DashBoard/StudentData/Addstudent';
+import LogOut from './components/DashBoard/LogOut';
 
 class App extends Component {
   render() {
     return (
+      <Router>
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <FrontComp />
+      <Route exact path="/students" component={Students} />
+      <Route exact path="/Addstudent" component={AddStudents} />
+      <Route exact path="/LogOut" component={LogOut} />
       </div>
+      </Router>
     );
   }
 }
