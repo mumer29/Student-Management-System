@@ -16,7 +16,7 @@ class NavBar extends Component{
         return (
         <nav className="nav-wrapper teal darken-4">
         <div className="container">
-        <span className="brand-logo">Student Management System</span>
+        <span className="brand-logo hide-on-small-only">Student Management System</span>
         <ul className="right">
         <li><Link to="/students">Students</Link></li>
         {show}
