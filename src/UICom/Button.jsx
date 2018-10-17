@@ -1,13 +1,19 @@
 import React from 'react';
 
 const Button = (props) => {
-    const {t , cn , oc, Sid} = props
-    return(<div>
-        {oc !== undefined ? (<button className={cn} onClick={() => {oc(Sid)}}>{t}</button>
-        ) : (
-            <button className={cn}>{t}</button>
-            )
+    
+    const check = () => {
+        const {t , cn , oc, Sid} = props;
+        if(oc === undefined){
+            return <button className={cn}>{t}</button>
         }
+        else if(t === undefined){
+            return <button className={cn} onClick={() => {oc(Sid)}}><i className="material-icons">perm_identity</i></button> 
+        }
+        else {return <button className={cn} onClick={() => {oc(Sid)}}>{t}</button>}
+    }
+    return(<div>
+        {check()}
         </div>
     )
 }

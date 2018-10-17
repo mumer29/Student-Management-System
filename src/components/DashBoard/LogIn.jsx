@@ -21,7 +21,9 @@ class LogIn extends Component{
         this.setState({[name] : value})
 
     }
-
+    whenClick = () => {
+        this.props.history.push('/SignUp');
+    }
     render(){
         return(
             <div className="container">
@@ -34,7 +36,7 @@ class LogIn extends Component{
             <br/>
             Password: <input name="UserPass" value={this.state.UserPass} type="password" onChange={this.whenChange}/> 
             <Button cn="btn" t="LogIn"/> &nbsp; &nbsp;
-            <Button cn="btn" t="Not Account?"/>
+            <Button cn="btn" t="Not Account?" oc={this.whenClick}/>
             </form>
             </div>
             </div>

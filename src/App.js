@@ -15,6 +15,7 @@ class App extends Component {
       <FrontComp />
       <Route exact path="/students" component={Students} />
       <Route exact path="/Addstudent" component={AddStudents} />
+      <Route exact path="/Addstudent/:id" component={AddStudents} />
       <Route exact path="/LogOut" component={LogOut} />
       <Route exact path="/SignUp" component={SignUp} />
       <Route exact path="/LogIn" component={LogIn} />

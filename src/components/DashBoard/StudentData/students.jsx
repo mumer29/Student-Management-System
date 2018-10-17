@@ -6,7 +6,8 @@ class Students extends Component{
     constructor(){
         super();
         this.state={
-            Student:[]
+            Student:[],
+            signIn: true
         }
         this.ref = firebase.database().ref();
 
@@ -23,10 +24,14 @@ class Students extends Component{
     }
 
     onDelete = (id) => {
-        
+        this.ref.child(`Student/${id}`).remove();
+  
     }
-    onEdit = (id) =>{
-        
+    onEdit = (id) => {
+        const TemArr = this.state.Student.find((stu) => {
+            return stu.id === id
+        });
+        this.props.history.push(`/Addstudent/${id}`, TemArr)
     }
     details = (id) => {
     this.props.history.push(`/details/${id}`);
@@ -35,24 +40,25 @@ class Students extends Component{
 
     render(){
         const {Student} = this.state;
-        console.log(Student);
         const StudentsList = Student.length ? (
             Student.map((s,i) => {
                 return (
                     <div className="row" key={i}>
-                    <div className="col s1 m1 l1">{++i}.</div>
+                    <div className="col s1 m1 l1 offset-l1">{++i}.</div>
                     <div className="col s3 m5 l5">
                     {s.Sname}
                     </div>
-                    <div className="col s3 m2 l2">
-                    <Button cn="btn" t="Details" Sid={s.id} oc={this.details}/>
+                    <div className="col s2 m2 l1">
+                    <Button cn="btn-floating" Sid={s.id} oc={this.details}/>
                     </div>
-                    <div className="col s2 m2 l2">
+                    {this.state.signIn ? (<div>
+                    <div className="col s3 m2 l2">
                     <Button cn="btn" t="Edit" Sid={s.id} oc={this.onEdit}/>
                     </div>
                     <div className="col s3 m2 l2">
                     <Button cn="btn" t="Delete" Sid={s.id} oc={this.onDelete}/>
                     </div>
+                    </div>) : (null)}
                     </div>
                 )
             })

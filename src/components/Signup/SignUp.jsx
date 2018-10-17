@@ -16,18 +16,14 @@ class SignUp extends Component{
     }
     onAdd = (event) => {
         event.preventDefault();
-        /* var ref = 
-        ref.createUser({
-            email    : this.state.UserEmail,
-            password : this.state.UserPass}) */
-
     }
     whenChange = (event) => {
         const {name, value} = event.target;
         this.setState({[name] : value})
-
     }
-
+    whenClick = () =>{
+        this.props.history.push('/LogIn');
+    }
     render(){
         return(
             <div className="container">
@@ -42,7 +38,7 @@ class SignUp extends Component{
             <br/>
             Password: <input name="UserPass" value={this.state.UserPass} type="password" onChange={this.whenChange}/> 
             <Button cn="btn" t="SignUp"/> &nbsp; &nbsp;
-            <Button cn="btn" t="Already Account?"/>
+            <Button cn="btn" t="Already Account?" oc={this.whenClick}/>
             </form>
             </div>
             </div>

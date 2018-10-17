@@ -16,6 +16,21 @@ class AddStudents extends Component{
         }
         this.ref = firebase.database().ref();
     }
+    componentDidMount(){
+        this.onEdit();
+    }
+    onEdit = () => {
+        const id = this.props.match.params.id;
+        const TemObj = this.props.location.state;
+        let name = TemObj.Sname;
+        let fname = TemObj.Sfname;
+        let age = TemObj.Sage;
+        let gender = TemObj.Sgender;
+        if(id){
+            this.setState({editId: id, StudentName: name, StudentFName: fname, StudentAge: age, StudentGender: gender})
+        }
+        else{return}
+    }
     onAdd = (event) => {
         event.preventDefault();
         const {StudentName, StudentFName, StudentAge, StudentGender, editId} = this.state;
@@ -23,7 +38,7 @@ class AddStudents extends Component{
             return 
         }
         else if(editId !== null){
-
+        this.ref.child(`Student/${editId}`).update({name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender});
         }
         else{
         this.ref.child('Student').push({name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender})
