@@ -4,3 +4,7 @@
 .form_a{
     cursor: pointer;
 }
+
+.text{
+    text-transform: capitalize !important
+}

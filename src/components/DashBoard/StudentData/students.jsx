@@ -15,6 +15,9 @@ class Students extends Component{
     }
     componentDidMount(){
         
+        this.getData();
+    }
+    getData = () => {
         this.ref.child('Student').on('value', (snapshot) => {
             const data = snapshot.val();
             const TemArr = [];

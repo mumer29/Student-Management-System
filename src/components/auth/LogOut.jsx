@@ -4,7 +4,9 @@ import * as firebase from 'firebase';
 import '../../config/fb'
 const LogOut = (props) => {
    const whenClick = () => {
+       props.history.push('/')
         firebase.auth().signOut();
+        
     }
     const WhenClick = () => {
         props.history.push('/')

@@ -31,36 +31,36 @@ class Details extends Component{
             <div className="container">
             <h4 className="center teal-text">Student Details</h4>
             {selectedStudent ? (
-                <div className="teal">
+                <div className="teal lighten-5">
                 <div className="row">
-                <div className="col s4 m3 l3 offset-l3 white-text">
+                <div className="col s4 m3 l3 offset-l3 teal-text darken-5">
                 Name: 
                 </div>
-                <div className="col s3 m3 l3 white-text">
+                <div className="col s3 m3 l3 black-text">
                 {selectedStudent.Sname} 
                 </div>
                 </div>
                 <div className="row">
-                <div className="col s4 m3 l3 offset-l3 white-text">
+                <div className="col s4 m3 l3 offset-l3 teal-text darken-5">
                 Father Name: 
                 </div>
-                <div className="col s3 m3 l3 white-text">
+                <div className="col s3 m3 l3 black-text">
                 {selectedStudent.Sfname} 
                 </div>
                 </div>
                 <div className="row">
-                <div className="col s4 m3 l3 offset-l3 white-text">
+                <div className="col s4 m3 l3 offset-l3 teal-text darken-5">
                 Age:
                 </div>
-                <div className="col s3 m3 l3 white-text">
+                <div className="col s3 m3 l3 black-text">
                 {selectedStudent.Sage} 
                 </div>
                 </div>
                 <div className="row">
-                <div className="col s4 m3 l3 offset-l3 white-text">
+                <div className="col s4 m3 l3 offset-l3 teal-text darken-5">
                 Gender: 
                 </div>
-                <div className="col s3 m3 l3 white-text">
+                <div className="col s3 m3 l3 black-text">
                 {selectedStudent.Sgender} 
                 </div>
                 </div>
