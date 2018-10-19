@@ -10,6 +10,9 @@ const Button = (props) => {
         else if(t === undefined){
             return <button className={cn} onClick={() => {oc(Sid)}}><i className="material-icons">perm_identity</i></button> 
         }
+        else if(Sid === undefined){
+            return <button className={cn} onClick={() => {oc()}}>{t}</button>
+        }
         else {return <button className={cn} onClick={() => {oc(Sid)}}>{t}</button>}
     }
     return(<div>

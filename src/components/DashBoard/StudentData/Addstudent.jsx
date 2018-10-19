@@ -22,11 +22,11 @@ class AddStudents extends Component{
     onEdit = () => {
         const id = this.props.match.params.id;
         const TemObj = this.props.location.state;
+        if(id || TemObj){
         let name = TemObj.Sname;
         let fname = TemObj.Sfname;
         let age = TemObj.Sage;
         let gender = TemObj.Sgender;
-        if(id){
             this.setState({editId: id, StudentName: name, StudentFName: fname, StudentAge: age, StudentGender: gender})
         }
         else{return}
@@ -43,7 +43,7 @@ class AddStudents extends Component{
         else{
         this.ref.child('Student').push({name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender})
         }
-        this.props.history.push('/students');
+        this.props.history.push('/');
         this.setState({StudentName: '',StudentFName: '', StudentAge: '', StudentGender: ''})
     }
     whenChange = (event) =>{

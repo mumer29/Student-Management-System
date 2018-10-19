@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import * as firebase from 'firebase';
 import Button from '../../../UICom/Button'
 import '../../../config/fb';
+import Loader from '../../Loader/Loader'
 class Students extends Component{
     constructor(){
         super();
@@ -13,6 +14,7 @@ class Students extends Component{
 
     }
     componentDidMount(){
+        
         this.ref.child('Student').on('value', (snapshot) => {
             const data = snapshot.val();
             const TemArr = [];
@@ -43,7 +45,7 @@ class Students extends Component{
         const StudentsList = Student.length ? (
             Student.map((s,i) => {
                 return (
-                    <div className="row" key={i}>
+                    <div className="row teal lighten-5 z-depth-1" key={i}>
                     <div className="col s1 m1 l1 offset-l1">{++i}.</div>
                     <div className="col s3 m5 l5">
                     {s.Sname}
@@ -63,14 +65,16 @@ class Students extends Component{
                 )
             })
         ) : (
-            <div className="center teal lighten-4">No Student Data</div>
+           <div className="row">
+           <div className="col s5 m3 l2 offset-s4 offset-m5 offset-l5">
+           <Loader />
+           </div>
+           </div>
         )
         return (
             <div className="container">
             <h3 className="center teal-text text-lighten-1">Students</h3>
-            <div className="teal lighten-5">
             {StudentsList}
-            </div>
             </div>
         )
     }
