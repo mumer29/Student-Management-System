@@ -32,11 +32,15 @@ class LogIn extends Component {
             firebase.auth().signInWithEmailAndPassword(this.state.UserEmail, this.state.UserPass)
                 .then((user) => { console.log({login: user}) })
                 .catch((error) => {
+                    console.log({code: error.code,login: error.message});
                     if(error.code === "auth/invalid-email"){
                     this.setState({messageE: error.message, email: true})
                 }
                     else if(error.code === "auth/wrong-password"){
                     this.setState({messageP: error.message, pass: true})
+                    }
+                    else if(error.code === "auth/user-not-found"){
+                        this.setState({messageE: `We can't find an account with ${this.state.UserEmail}. Try another email, or if you don't have an account, you can Sign up.`,email: true})
                     }
                 
                 })
@@ -45,6 +49,7 @@ class LogIn extends Component {
             firebase.auth().createUserWithEmailAndPassword(this.state.UserEmail, this.state.UserPass)
                 .then((user) => { console.log({signup: user}) })
                 .catch((error) => {
+                    console.log({code: error.cod, signup: error.message})
                     if(error.code === "auth/invalid-email"){
                         this.setState({messageE: error.message, email: true})
                     }
