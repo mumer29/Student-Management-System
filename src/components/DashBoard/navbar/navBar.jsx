@@ -10,6 +10,7 @@ class NavBar extends Component{
         this.state = {
           User: {},
           signIn: false,
+          name: "",
           
         }
       }
@@ -19,9 +20,18 @@ class NavBar extends Component{
       authListener = () => {
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
-            this.setState({User: user})
-            console.log(user)
             console.log("Current User Signed In");
+            const name = user.displayName;
+            let char = name.slice(0,1);
+            let index = null
+            let a = [...name]
+            for(let i = 0; i < a.length; i++){
+              if(a[i] === " "){
+                index += a.indexOf(" ");
+                char += a[index+1]
+                }
+            }
+            this.setState({User: user, name: char})
           } else {
             this.setState({User: null})
             console.log("No Signed In user")
@@ -38,7 +48,7 @@ class NavBar extends Component{
         <span className="btn btn-floating teal darken-2 hide-on-med-and-up">SMS</span>
         <ul className="right">
         <li><Link to="/students">Students</Link></li>
-        <SignedInLinks />
+        <SignedInLinks name={this.state.name}/>
         </ul>
         </div>
         </nav>) : (<LogIn />)}

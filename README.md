@@ -1,1 +1,1 @@
-App Link: 
+App Link: https://student-info-react-app.firebaseapp.com/ 

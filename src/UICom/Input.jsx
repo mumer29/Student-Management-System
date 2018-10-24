@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from 'prop-types';
 const Input = (props) => {
     const {f,d,l,n,t, oc, v, } = props;
     return(
@@ -10,11 +9,5 @@ const Input = (props) => {
         </div>
         </div>
     )
-}
-Input.propTypes = {
-    v : PropTypes.string.isRequired,
-    t : PropTypes.string.isRequired,
-
-
 }
 export default Input;
