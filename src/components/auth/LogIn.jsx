@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Button from '../../UICom/Button';
 import InputS from '../../UICom/InputS';
-import Anchor from '../../UICom/Anchor';
+import An from '../../UICom/An';
 import * as firebase from 'firebase';
 import '../../config/fb'
 import './LogIn.css'
@@ -19,9 +19,8 @@ class LogIn extends Component {
             messageP: '',
             email: null,
             pass : null,
-
         }
-
+        this.ref = firebase.database().ref();
     }
     onAdd = (event) => {
         event.preventDefault();
@@ -30,7 +29,7 @@ class LogIn extends Component {
         }
         else if (this.state.LogIn) {
             firebase.auth().signInWithEmailAndPassword(this.state.UserEmail, this.state.UserPass)
-                .then((user) => { console.log({login: user}) })
+                .then((user) => { console.log("User Logged In") })
                 .catch((error) => {
                     console.log({code: error.code,login: error.message});
                     if(error.code === "auth/invalid-email"){
@@ -42,12 +41,15 @@ class LogIn extends Component {
                     else if(error.code === "auth/user-not-found"){
                         this.setState({messageE: `We can't find an account with ${this.state.UserEmail}. Try another email, or if you don't have an account, you can Sign up.`,email: true})
                     }
-                
+                    else if(error.code === "auth/user-disabled"){
+                        this.setState({messageE: `Sorry, This user account has been disabled by an administrator.`, email: true})
+                    }
                 })
         }
         else if (this.state.SignUp) {
             firebase.auth().createUserWithEmailAndPassword(this.state.UserEmail, this.state.UserPass)
-                .then((user) => { console.log({signup: user}) })
+                .then((user) => {console.log("New User Logged In")
+            })
                 .catch((error) => {
                     console.log({code: error.cod, signup: error.message})
                     if(error.code === "auth/invalid-email"){
@@ -70,7 +72,7 @@ class LogIn extends Component {
         const auth = firebase.auth();
         const email = this.state.UserEmail;
         auth.sendPasswordResetEmail(email)
-        .then((user) => {console.log({pass: user})})
+        .then((user) => {console.log("User reset password request send")})
         .catch((error) => {console.log({error: error})})
 
         this.setState({
@@ -151,8 +153,8 @@ class LogIn extends Component {
                                         <InputS n="UserPass" v={this.state.UserPass} t="password" oc={this.whenChange} f="pass" p={this.state.pass} m={this.state.messageP} d="pass" l='Password' />
                                     </div>
                                     <div className="card-action teal lighten-5">
-                                        <Button cn="btn form_bu" t="Log in" /> <Anchor cn="blue-text form_a text-ligten-1 text" t="Forget Password?" oc={this.WhenClicK}/> <br/>
-                                        <span className="grey-text darken-1">Don't have an account?</span>  &nbsp; <Anchor cn="teal-text form_a text" t="Sign up" oc={this.whenClick} />
+                                        <Button cn="btn form_bu" t="Log in" /> <An cn="blue-text form_a text-ligten-1 text" t="Forget Password?" oc={this.WhenClicK}/> <br/>
+                                        <span className="grey-text darken-1">Don't have an account?</span>  &nbsp; <An cn="teal-text form_a text" t="Sign up" oc={this.whenClick} />
                                     </div>
                                 </form>
                             </div>
@@ -171,7 +173,7 @@ class LogIn extends Component {
                                     </div>
                                     <div className="card-action teal lighten-5">
                                         <Button cn="btn form_bu" t="Sign up" />
-                                        <span className="grey-text darken-1">Already have an account?</span> &nbsp; <Anchor cn="teal-text form_a text" t="Log in" oc={this.WhenClick} />
+                                        <span className="grey-text darken-1">Already have an account?</span> &nbsp; <An cn="teal-text form_a text" t="Log in" oc={this.WhenClick} />
                                     </div>
                                     </form>
                                 </div>
@@ -192,7 +194,7 @@ class LogIn extends Component {
                                         </div>
                                         <div className="card-action teal lighten-5">
                                             <Button cn="btn form_bu" t="Send Password Reset Email" />
-                                            <Anchor cn="blue-text form_a text" t="Go Back" oc={this.WhenClick} />
+                                            <An cn="blue-text form_a text" t="Go Back" oc={this.WhenClick} />
                                         </div>
                                     </form>
                                 </div>

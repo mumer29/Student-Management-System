@@ -13,43 +13,76 @@ class AddStudents extends Component {
             StudentAge: '',
             StudentGender: '',
             editId: null,
-            lc:false,
+            edit: false,
+            User: {},
+            studentPervData: null
+            
+            
         }
         this.ref = firebase.database().ref();
     }
-    componentDidMount() {
-        this.onEdit();
+    componentDidMount(){
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log("current user")
+                this.setState({User: user})
+                this.getStudentsData(user.uid)
+            } else {
+                console.log("current user null")
+            }
+          });
     }
-    onEdit = () => {
+    
+    onEdit = (StudentData) => {
         const id = this.props.match.params.id;
-        const TemObj = this.props.location.state;
-        if (id || TemObj) {
-            let name = TemObj.Sname;
-            let fname = TemObj.Sfname;
-            let age = TemObj.Sage;
-            let gender = TemObj.Sgender;
-            this.setState({ editId: id, 
-                StudentName: name, 
-                StudentFName: fname, 
-                StudentAge: age, 
-                StudentGender: gender, lc: "active" })
+        const Editstudent = StudentData.find((stu) =>{
+            return stu.StudentID === id
+        })
+        if (Editstudent){
+            console.log("edit student data");
+                this.setState({ 
+                editId: id, 
+                lc: "active", 
+                edit: "Edit Student",
+                StudentName: Editstudent.name,
+                StudentFName: Editstudent.fname,
+                StudentAge: Editstudent.age,
+                StudentGender: Editstudent.gender, 
+             })
         }
-        else { return }
+       
+    }
+    getStudentsData = (uid) => {
+        const id = uid
+        this.ref.child(`Student/${id}`).on("value", (snapshot) => {
+            const data = snapshot.val();
+            const TempArr = [];
+            for (let key in data) {
+                TempArr.push({ StudentID: key, name: data[key].name, fname: data[key].fname, age: data[key].age, gender: data[key].gender });
+            }
+            this.onEdit(TempArr);
+        })
     }
     onAdd = (event) => {
+        let {User} = this.state;
+        let userid = User.uid;
         event.preventDefault();
         const { StudentName, StudentFName, StudentAge, StudentGender, editId } = this.state;
         if (StudentName === '' || StudentFName === '' || StudentGender === '' || StudentAge === '') {
             return
         }
         else if (editId !== null) {
-            this.ref.child(`Student/${editId}`).update({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender });
+            this.ref.child(`Student/${userid}/${this.state.editId}`).update({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender });
         }
         else {
-            this.ref.child('Student').push({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender })
+            this.ref.child(`Student/${userid}`).push({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender })
         }
-        this.props.history.push('/');
-        this.setState({ StudentName: '', StudentFName: '', StudentAge: '', StudentGender: '' })
+        this.props.history.push('/students');
+        this.setState({ StudentName: '', 
+        StudentFName: '', StudentAge: '', StudentGender: '',
+        lc: "active", 
+        edit: false,
+        editId: '', })
     }
     whenChange = (event) => {
         const { name, value } = event.target;
@@ -64,11 +97,13 @@ class AddStudents extends Component {
                 </div>
                 <div className="teal lighten-5">
                     <form onSubmit={this.onAdd}>
-                        <Input v={this.state.StudentName} oc={this.whenChange} lc={this.state.lc} t="text" f='name' d='name' l='Name' n="StudentName" />
-                        <Input v={this.state.StudentFName} oc={this.whenChange} lc={this.state.lc} t="text" f='fname' d='fname' l='Father Name' n="StudentFName" />
-                        <Input v={this.state.StudentAge} oc={this.whenChange} lc={this.state.lc} t="number" f='age' d='age' l='Age' n="StudentAge" />
-                        <Input v={this.state.StudentGender} oc={this.whenChange} lc={this.state.lc} t="text" f='gender' d='gender' l='Gender' n="StudentGender" />
-                        <Button cn="btn-small right" t="Add Student" />
+                        <Input v={this.state.StudentName} oc={this.whenChange}  t="text" f='name' d='name' l='Name' n="StudentName" />
+                        <Input v={this.state.StudentFName} oc={this.whenChange}  t="text" f='fname' d='fname' l='Father Name' n="StudentFName" />
+                        <Input v={this.state.StudentAge} oc={this.whenChange}  t="number" f='age' d='age' l='Age' n="StudentAge" />
+                        <Input v={this.state.StudentGender} oc={this.whenChange}  t="text" f='gender' d='gender' l='Gender' n="StudentGender" />
+                        {this.state.edit ? (<Button cn="btn-small right" t={this.state.edit} />
+                        ) : (
+                        <Button cn="btn-small right" t="Add Student" />)}
                     </form>
                 </div>
             </div>

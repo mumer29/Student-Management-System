@@ -10,7 +10,18 @@ class Details extends Component{
         this.ref = firebase.database().ref();
     }
     componentDidMount(){
-        this.ref.child('Student').on('value', (snapshot) => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log("current user")
+                this.getStudentData(user.uid)
+            } else {
+                console.log("current user null")
+            }
+          });
+        
+    }
+    getStudentData = (uid) => {
+        this.ref.child(`Student/${uid}`).on('value', (snapshot) => {
             const data = snapshot.val();
             const TemArr = [];
             for(let key in data){

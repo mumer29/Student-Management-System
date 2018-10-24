@@ -1,5 +1,5 @@
 import React from 'react';
-import Anchor from '../../UICom/Anchor';
+import An from '../../UICom/An';
 import * as firebase from 'firebase';
 import '../../config/fb'
 const LogOut = (props) => {
@@ -24,9 +24,9 @@ const LogOut = (props) => {
                             <p className="Black-text">Are you sure, You want to log out?</p>
                         </div>
                         <div className="card-action">
-                        <Anchor cn="btn-small black-text" t="Cancel" oc={WhenClick} />
+                        <An cn="btn-small black-text" t="Cancel" oc={WhenClick} />
                         &nbsp; &nbsp; &nbsp;
-                        <Anchor cn="btn-small black-text" t="Log out" oc={whenClick} />
+                        <An cn="btn-small black-text" t="Log out" oc={whenClick} />
                         </div>
                     </div>
                 </div>
