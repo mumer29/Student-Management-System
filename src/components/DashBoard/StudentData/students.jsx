@@ -15,19 +15,22 @@ class Students extends Component{
 
     }
     componentDidMount(){
+        console.log({students: "componentDidMount"})
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log("current user")
                 this.getStudentsData(user.uid)
                 this.setState({User: user})
             } else {
-                console.log("current user null")
+                console.log({students: "current user null"})
             }
           });
           const editstudentId = this.props.match.params.id
           if(editstudentId){
             this.setState({edit: true})
           }
+    }
+    componentWillUnmount(){
+        console.log({student: "componentwillunmount"})
     }
     getStudentsData = (id) => {
         this.ref.child(`Student/${id}`).on('value', (snapshot) => {
@@ -91,7 +94,6 @@ class Students extends Component{
            </div>
            </div>
         )
-        
         return (
             <div className="container">
             {ShowData}

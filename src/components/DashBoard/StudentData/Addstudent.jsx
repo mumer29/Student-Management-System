@@ -22,27 +22,25 @@ class AddStudents extends Component {
         this.ref = firebase.database().ref();
     }
     componentDidMount(){
+        console.log({AddStudents: "componentDidMount"})
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log("current user")
                 this.setState({User: user})
                 this.getStudentsData(user.uid)
             } else {
-                console.log("current user null")
+                console.log({AddStudents: "current user null"})
             }
           });
     }
     
-    onEdit = (StudentData) => {
-        const id = this.props.match.params.id;
+    onEdit = (StudentData, id) => {
         const Editstudent = StudentData.find((stu) =>{
             return stu.StudentID === id
         })
         if (Editstudent){
             console.log("edit student data");
                 this.setState({ 
-                editId: id, 
-                lc: "active", 
+                editId: id,
                 edit: "Edit Student",
                 StudentName: Editstudent.name,
                 StudentFName: Editstudent.fname,
@@ -54,13 +52,16 @@ class AddStudents extends Component {
     }
     getStudentsData = (uid) => {
         const id = uid
-        this.ref.child(`Student/${id}`).on("value", (snapshot) => {
+        this.ref.child(`Student/${id}`).once("value", (snapshot) => {
             const data = snapshot.val();
             const TempArr = [];
             for (let key in data) {
                 TempArr.push({ StudentID: key, name: data[key].name, fname: data[key].fname, age: data[key].age, gender: data[key].gender });
             }
-            this.onEdit(TempArr);
+            const EditID = this.props.match.params.id; 
+            if(EditID){
+                this.onEdit(TempArr, EditID)
+            }
         })
     }
     onAdd = (event) => {
@@ -72,17 +73,23 @@ class AddStudents extends Component {
             return
         }
         else if (editId !== null) {
+            console.log("edited")
             this.ref.child(`Student/${userid}/${this.state.editId}`).update({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender });
         }
         else {
+            console.log("added")
             this.ref.child(`Student/${userid}`).push({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender })
         }
-        this.props.history.push('/students');
         this.setState({ StudentName: '', 
         StudentFName: '', StudentAge: '', StudentGender: '',
-        lc: "active", 
         edit: false,
         editId: '', })
+        setTimeout(()=> {
+            this.props.history.push('/students'); 
+        },1000)
+    }
+    componentWillUnmount(){
+        console.log({AddStudents: "componentwillUnmount"})
     }
     whenChange = (event) => {
         const { name, value } = event.target;
@@ -107,7 +114,6 @@ class AddStudents extends Component {
                     </form>
                 </div>
             </div>
-
         )
     }
 }

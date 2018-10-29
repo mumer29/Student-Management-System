@@ -9,7 +9,6 @@ class LogIn extends Component {
     constructor() {
         super();
         this.state = {
-            UserName: '',
             UserEmail: '',
             UserPass: '',
             SignUp: false,
@@ -78,7 +77,6 @@ class LogIn extends Component {
         this.setState({
         UserEmail: '', ForgetPass: false, LogIn: true
         })
-        
 
     }
     whenChange = (event) => {
@@ -88,7 +86,6 @@ class LogIn extends Component {
     }
     whenClick = () => {
         this.setState({
-            UserName: '',
             UserEmail: '',
             UserPass: '',
             SignUp: true,
@@ -102,8 +99,7 @@ class LogIn extends Component {
         
     }
     WhenClick = () => {
-        this.setState({ 
-            UserName: '',
+        this.setState({
             UserEmail: '',
             UserPass: '',
             SignUp: false,
@@ -117,7 +113,6 @@ class LogIn extends Component {
     }
     WhenClicK = () => {
         this.setState({ 
-            UserName: '',
             UserEmail: '',
             UserPass: '',
             SignUp: false,
@@ -167,7 +162,6 @@ class LogIn extends Component {
                                     <div className="card-content teal lighten-5">
                                         <div className="card-title z-depth-1 center teal white-text">Sign Up</div>
                                         <br/>
-                                        <InputS n="UserName" v={this.state.UserName} t="text" oc={this.whenChange} f="name" d="name" l="Name" />
                                         <InputS n="UserEmail" v={this.state.UserEmail} t="text" oc={this.whenChange} f="email" e={this.state.email} m={this.state.messageE} d="email" l="Email" />
                                         <InputS n="UserPass" v={this.state.UserPass} t="password" oc={this.whenChange} f="pass" p={this.state.pass} m={this.state.messageP} d="pass" l='Password' />
                                     </div>

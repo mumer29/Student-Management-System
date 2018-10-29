@@ -1,16 +1,21 @@
 import React,{Component} from 'react';
-import {Link, withRouter} from "react-router-dom";
+import {NavLink, Link, withRouter} from "react-router-dom";
 import * as firebase from 'firebase';
 import "../../../config/fb";
 import LogIn from '../../auth/LogIn';
 import SignedInLinks from './SignedInLinks';
+import Drawer from '@material-ui/core/Drawer';
+
+import './navBar.css'
+
 class NavBar extends Component{
     constructor() {
         super()
         this.state = {
-          User: {},
+          User: null,
           signIn: false,
           name: "",
+          left: false,
           
         }
       }
@@ -21,8 +26,18 @@ class NavBar extends Component{
         firebase.auth().onAuthStateChanged((user) => {
           if (user) {
             console.log("Current User Signed In");
-            const name = user.displayName;
-            let char = name.slice(0,1);
+            this.setState({User: user})
+          } else {
+            this.setState({User: null})
+            console.log("No Signed In user")
+          }
+        });
+      }
+      changeName = () => {
+        const user = this.state.User
+        const name = user.displayName;
+        if(name){
+          let char = name.slice(0,1);
             let index = null
             let a = [...name]
             for(let i = 0; i < a.length; i++){
@@ -31,24 +46,56 @@ class NavBar extends Component{
                 char += a[index+1]
                 }
             }
-            this.setState({User: user, name: char})
-          } else {
-            this.setState({User: null})
-            console.log("No Signed In user")
-          }
-        });
+            return char;
+        }
+        else{ 
+          const email = user.email;
+          let char = email.slice(0,1);
+          return char; 
+        }
       }
+      toggleDrawer = (open) => () => {
+        this.setState({
+          left : open,
+        });
+      };
     render(){
+    const sideList = (
+    <div className="list_width">
+      <ul className="collection with-header">
+      <li className="collection-header teal">
+      <NavLink to="/UserProfile"><h5 className="white-text">{this.state.User ? (this.state.User.displayName ? (this.state.User.displayName
+        ) : (this.state.User.email)
+        ) : (null)}</h5>
+      </NavLink>
+      </li>
+      <li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to="/students">Students</NavLink></li>
+      <li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to='/Addstudent'>Add Students</NavLink></li>
+      <li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to='/LogOut'>Log out</NavLink></li>
+      </ul>
+      </div>
+    );
         return (
             <div>
             {this.state.User ? (
         <nav className="nav-wrapper teal darken-4">
         <div className="container">
-        <span className="brand-logo hide-on-small-only">Student Management System</span>
-        <span className="btn btn-floating teal darken-2 hide-on-med-and-up">SMS</span>
-        <ul className="right">
+        <span onClick={this.toggleDrawer(true)} className="btn-small btn-floating transparent hide-on-large-only">
+        <i className="material-icons">menu</i>
+        </span>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <span className="flow-text teal darken-4 hide-on-large-only">Student Management System</span>
+        <Drawer open={this.state.left} onClose={this.toggleDrawer(false)}>
+          <div onClick={this.toggleDrawer(false)}>
+            {sideList}
+          </div>
+        </Drawer>
+        <span className="brand-logo hide-on-med-and-down">Student Management System</span>
+        <ul className="right hide-on-med-and-down">
         <li><Link to="/students">Students</Link></li>
-        <SignedInLinks name={this.state.name}/>
+        <SignedInLinks name={this.changeName()}/>
         </ul>
         </div>
         </nav>) : (<LogIn />)}

@@ -46,7 +46,6 @@ class UserProfile extends Component {
           purl: photoURL,
           email: user.email
         }
-        console.log(a);
         this.setState({ User: user, UserData: a })
       } else {
         console.log("current user null")
@@ -90,7 +89,7 @@ class UserProfile extends Component {
         <br />
         <br />
         {this.state.profile ? (<div className="row">
-          <div className="col s12 m6 l6 offset-l3 offset-m3">
+          <div className="col s12 m8 l6 offset-l3 offset-m2">
             <div className="card teal lighten-5">
               <div className="card-image">
                 {UserData.purl ? (<img src={UserData.purl} alt="user-profile" className="responsive-img" />
