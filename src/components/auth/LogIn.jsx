@@ -5,12 +5,14 @@ import An from '../../UICom/An';
 import * as firebase from 'firebase';
 import '../../config/fb'
 import './LogIn.css'
+import Checkbox from '../../UICom/checkbox';
 class LogIn extends Component {
     constructor() {
         super();
         this.state = {
             UserEmail: '',
             UserPass: '',
+            Status: '',
             SignUp: false,
             LogIn: true,
             ForgetPass: false,
@@ -23,10 +25,10 @@ class LogIn extends Component {
     }
     onAdd = (event) => {
         event.preventDefault();
-        if (this.state.UserEmail === '' || this.state.UserPass === '') {
-            return
-        }
-        else if (this.state.LogIn) {
+        if (this.state.LogIn) {
+            if (this.state.UserEmail === '' || this.state.UserPass === '') {
+                return
+            }
             firebase.auth().signInWithEmailAndPassword(this.state.UserEmail, this.state.UserPass)
                 .then((user) => { console.log("User Logged In") })
                 .catch((error) => {
@@ -46,11 +48,16 @@ class LogIn extends Component {
                 })
         }
         else if (this.state.SignUp) {
+            if (this.state.UserEmail === '' || this.state.UserPass === '' || this.state.Status === '') {
+                return
+            }
             firebase.auth().createUserWithEmailAndPassword(this.state.UserEmail, this.state.UserPass)
-                .then((user) => {console.log("New User Logged In")
+                .then((user) => {
+                    this.ref.child(`Status${user.user.uid}`).push({status: this.state.Status})
+                    console.log("New User Logged In")
             })
                 .catch((error) => {
-                    console.log({code: error.cod, signup: error.message})
+                    console.log({code: error.cod, signup: error.message, error: error})
                     if(error.code === "auth/invalid-email"){
                         this.setState({messageE: error.message, email: true})
                     }
@@ -84,10 +91,24 @@ class LogIn extends Component {
         this.setState({ [name]: value, email: null, pass: null, messageE: '', messageP: ''})
 
     }
+    componentWillUnmount(){
+        console.log({logIN: "componentWillUnmount"})
+        this.setState({UserEmail: '',
+        UserPass: '',
+        SignUp: false,
+        LogIn: true,
+        Status: '',
+        ForgetPass: false,
+        messageE: '',
+        messageP: '',
+        email: null,
+        pass : null,})
+    }
     whenClick = () => {
         this.setState({
             UserEmail: '',
             UserPass: '',
+            Status: '',
             SignUp: true,
             LogIn: false,
             ForgetPass: false,
@@ -104,6 +125,7 @@ class LogIn extends Component {
             UserPass: '',
             SignUp: false,
             LogIn: true,
+            Status: '',
             ForgetPass: false,
             messageE: '',
             messageP: '',
@@ -117,6 +139,7 @@ class LogIn extends Component {
             UserPass: '',
             SignUp: false,
             LogIn: false,
+            Status: '',
             ForgetPass: true,
             messageE: '',
             messageP: '',
@@ -164,6 +187,8 @@ class LogIn extends Component {
                                         <br/>
                                         <InputS n="UserEmail" v={this.state.UserEmail} t="text" oc={this.whenChange} f="email" e={this.state.email} m={this.state.messageE} d="email" l="Email" />
                                         <InputS n="UserPass" v={this.state.UserPass} t="password" oc={this.whenChange} f="pass" p={this.state.pass} m={this.state.messageP} d="pass" l='Password' />
+                                        <p className="teal-text text-lighten-1">Who are you?</p>
+                                        <Checkbox wc={this.whenChange}/>
                                     </div>
                                     <div className="card-action teal lighten-5">
                                         <Button cn="btn form_bu" t="Sign up" />

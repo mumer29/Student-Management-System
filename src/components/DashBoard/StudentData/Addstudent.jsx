@@ -26,11 +26,11 @@ class AddStudents extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setState({User: user})
-                this.getStudentsData(user.uid)
             } else {
                 console.log({AddStudents: "current user null"})
             }
           });
+          this.getStudentsData()
     }
     
     onEdit = (StudentData, id) => {
@@ -38,7 +38,6 @@ class AddStudents extends Component {
             return stu.StudentID === id
         })
         if (Editstudent){
-            console.log("edit student data");
                 this.setState({ 
                 editId: id,
                 edit: "Edit Student",
@@ -50,9 +49,8 @@ class AddStudents extends Component {
         }
        
     }
-    getStudentsData = (uid) => {
-        const id = uid
-        this.ref.child(`Student/${id}`).once("value", (snapshot) => {
+    getStudentsData = () => {
+        this.ref.child(`Student`).once("value", (snapshot) => {
             const data = snapshot.val();
             const TempArr = [];
             for (let key in data) {
@@ -65,20 +63,16 @@ class AddStudents extends Component {
         })
     }
     onAdd = (event) => {
-        let {User} = this.state;
-        let userid = User.uid;
         event.preventDefault();
         const { StudentName, StudentFName, StudentAge, StudentGender, editId } = this.state;
         if (StudentName === '' || StudentFName === '' || StudentGender === '' || StudentAge === '') {
             return
         }
         else if (editId !== null) {
-            console.log("edited")
-            this.ref.child(`Student/${userid}/${this.state.editId}`).update({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender });
+            this.ref.child(`Student/${this.state.editId}`).update({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender });
         }
         else {
-            console.log("added")
-            this.ref.child(`Student/${userid}`).push({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender })
+            this.ref.child(`Student`).push({ name: StudentName, fname: StudentFName, age: StudentAge, gender: StudentGender })
         }
         this.setState({ StudentName: '', 
         StudentFName: '', StudentAge: '', StudentGender: '',

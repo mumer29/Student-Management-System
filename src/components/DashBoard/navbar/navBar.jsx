@@ -16,8 +16,10 @@ class NavBar extends Component{
           signIn: false,
           name: "",
           left: false,
+          status: "",
           
         }
+        this.ref = firebase.database().ref()
       }
       componentDidMount = () => {
         this.authListener();
@@ -27,11 +29,22 @@ class NavBar extends Component{
           if (user) {
             console.log("Current User Signed In");
             this.setState({User: user})
+            this.getStatus(user.uid)
           } else {
             this.setState({User: null})
             console.log("No Signed In user")
           }
         });
+      }
+      getStatus = (uid) => {
+        this.ref.child(`Status${uid}`).on("value", (snapshot)=> {
+          const s = snapshot.val()
+          let tems = ""
+          for(let key in s){
+            tems += s[key].status
+          }
+        this.setState({status: tems})
+        })
       }
       changeName = () => {
         const user = this.state.User
@@ -70,7 +83,7 @@ class NavBar extends Component{
       </NavLink>
       </li>
       <li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to="/students">Students</NavLink></li>
-      <li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to='/Addstudent'>Add Students</NavLink></li>
+      {this.state.status === "teacher" ? (<li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to='/Addstudent'>Add Students</NavLink></li>) : (null)}
       <li className="collection-item"><NavLink className="grey-text" exact activeClassName="black-text" to='/LogOut'>Log out</NavLink></li>
       </ul>
       </div>
@@ -95,7 +108,7 @@ class NavBar extends Component{
         <span className="brand-logo hide-on-med-and-down">Student Management System</span>
         <ul className="right hide-on-med-and-down">
         <li><Link to="/students">Students</Link></li>
-        <SignedInLinks name={this.changeName()}/>
+        <SignedInLinks s={this.state.status} name={this.changeName()}/>
         </ul>
         </div>
         </nav>) : (<LogIn />)}

@@ -25,7 +25,6 @@ class UserProfile extends Component {
   getUserData = () => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log("current user")
         let displayName = ''
         let phoneNumber = ''
         let photoURL = ''
@@ -75,7 +74,7 @@ class UserProfile extends Component {
     event.preventDefault();
     const user = firebase.auth().currentUser;
     user.updateProfile({displayName: this.state.UserName})
-    .then(() => {console.log("name updated")
+    .then(() => {
     this.getUserData();})
     .catch((error) => {console.log(error)})
     this.setState({edit: false, profile: true,
